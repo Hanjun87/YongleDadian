@@ -1,0 +1,5 @@
+llamafactory
+transformers
+torch
+torchvision
+torchaudio
