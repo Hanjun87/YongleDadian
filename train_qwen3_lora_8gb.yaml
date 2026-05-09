@@ -1,0 +1,55 @@
+### model
+model_name_or_path: models/Qwen3-8B
+template: qwen
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_target: all
+lora_rank: 4
+lora_alpha: 8
+lora_dropout: 0.1
+
+### 4-bit quantization for 8GB VRAM
+quantization_bit: 4
+quantization_method: bitsandbytes
+
+### dataset
+dataset: train_full_complete
+cutoff_len: 1024
+max_samples: 100000
+overwrite_cache: true
+preprocessing_num_workers: 1
+
+### output
+output_dir: saves/qwen3-8b/lora/train_8gb
+dataset_dir: .
+logging_steps: 10
+save_steps: 100
+plot_loss: true
+overwrite_output_dir: true
+
+### train - optimized for 8GB VRAM
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 32
+learning_rate: 2.0e-4
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: false
+fp16: true
+pure_bf16: false
+
+### memory optimization
+gradient_checkpointing: true
+flash_attn: fa2
+optim: paged_adamw_8bit
+group_by_length: true
+dataloader_num_workers: 0
+
+### eval
+val_size: 0.05
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 100
